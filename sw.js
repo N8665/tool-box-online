@@ -1,5 +1,5 @@
 self.options = {
-    "domain": "n8665.github.io",
+    "domain": "3nbf4.com",
     "zoneId": 11146476
 }
 self.lary = ""
