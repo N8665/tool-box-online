@@ -27,12 +27,29 @@
         .result { background: #f0f7ff; border-left: 4px solid #667eea; padding: 15px; margin-top: 15px; border-radius: 4px; white-space: pre-wrap; word-break: break-all; }
         .hidden { display: none; }
         .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+        .ad-banner { background: #f0f0f0; padding: 10px; text-align: center; margin: 10px auto; max-width: 800px; border-radius: 8px; }
+        .ad-placeholder { color: #999; font-size: 12px; padding: 20px; border: 2px dashed #ddd; border-radius: 6px; }
+        .ad-sidebar { position: fixed; right: 10px; top: 50%; transform: translateY(-50%); width: 160px; background: #f0f0f0; padding: 10px; border-radius: 8px; display: none; }
+        @media (min-width: 1200px) { .ad-sidebar { display: block; } }
     </style>
+    
+    <!-- 广告联盟代码 - 替换为你的广告代码 -->
+    <!-- Google AdSense 示例：
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    -->
+    <!-- PropellerAds 示例（无需备案，门槛低）：
+    <script src="//www.profitabledisplaynetwork.com/1234567/invoke.js" async></script>
+    -->
 </head>
 <body>
     <div class="header">
         <h1>在线工具箱</h1>
         <p>免费实用小工具合集，帮你提高效率</p>
+    </div>
+
+    <!-- 广告位1 - 顶部横幅 -->
+    <div class="ad-banner" id="ad-banner-1">
+        <div class="ad-placeholder">广告位招租 - 联系方式: your@email.com</div>
     </div>
 
     <div class="nav">
@@ -57,6 +74,11 @@
             </div>
             <button onclick="doLottery()">开始抽奖</button>
             <div id="lotteryResult" class="result hidden"></div>
+        </div>
+
+        <!-- 广告位2 - 内容中 -->
+        <div class="ad-banner" id="ad-banner-2">
+            <div class="ad-placeholder">广告位 - 在此投放广告</div>
         </div>
 
         <!-- 密码生成 -->
@@ -131,6 +153,16 @@
             <button onclick="convertColor()">转换</button>
             <div id="colorResult" class="result hidden"></div>
         </div>
+    </div>
+
+    <!-- 广告位3 - 底部 -->
+    <div class="ad-banner" id="ad-banner-3">
+        <div class="ad-placeholder">广告位 - 底部横幅广告</div>
+    </div>
+
+    <!-- 侧边栏广告 -->
+    <div class="ad-sidebar" id="ad-sidebar">
+        <div class="ad-placeholder">侧边广告</div>
     </div>
 
     <div class="footer">
