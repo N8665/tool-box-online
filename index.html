@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线工具箱 - 免费实用小工具合集</title>
+    <meta name="description" content="提供免费在线工具：随机抽奖、密码生成、日期计算、文本转换等实用工具">
+    <meta name="keywords" content="在线工具,随机抽奖,密码生成,日期计算器,文本工具">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        .nav { background: white; padding: 10px 20px; display: flex; gap: 10px; overflow-x: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav button { padding: 8px 16px; border: none; border-radius: 20px; background: #eee; cursor: pointer; white-space: nowrap; font-size: 14px; }
+        .nav button.active { background: #667eea; color: white; }
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .tool-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .tool-card h2 { font-size: 18px; margin-bottom: 15px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 8px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 14px; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        textarea { resize: vertical; min-height: 80px; }
+        button { padding: 10px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        button:hover { opacity: 0.9; }
+        .result { background: #f0f7ff; border-left: 4px solid #667eea; padding: 15px; margin-top: 15px; border-radius: 4px; white-space: pre-wrap; word-break: break-all; }
+        .hidden { display: none; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>在线工具箱</h1>
+        <p>免费实用小工具合集，帮你提高效率</p>
+    </div>
+
+    <div class="nav">
+        <button class="active" onclick="showTool('lottery')">随机抽奖</button>
+        <button onclick="showTool('password')">密码生成</button>
+        <button onclick="showTool('date')">日期计算</button>
+        <button onclick="showTool('text')">文本工具</button>
+        <button onclick="showTool('color')">颜色工具</button>
+    </div>
+
+    <div class="container">
+        <!-- 随机抽奖 -->
+        <div id="lottery" class="tool-card">
+            <h2>随机抽奖工具</h2>
+            <div class="form-group">
+                <label>输入抽奖名单（每行一个）</label>
+                <textarea id="lotteryNames" placeholder="张三&#10;李四&#10;王五&#10;..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>抽取人数</label>
+                <input type="number" id="lotteryCount" value="1" min="1">
+            </div>
+            <button onclick="doLottery()">开始抽奖</button>
+            <div id="lotteryResult" class="result hidden"></div>
+        </div>
+
+        <!-- 密码生成 -->
+        <div id="password" class="tool-card hidden">
+            <h2>密码生成器</h2>
+            <div class="form-group">
+                <label>密码长度</label>
+                <input type="number" id="pwdLength" value="16" min="6" max="64">
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="pwdUpper" checked> 包含大写字母
+                </label>
+                <label>
+                    <input type="checkbox" id="pwdNumber" checked> 包含数字
+                </label>
+                <label>
+                    <input type="checkbox" id="pwdSymbol" checked> 包含符号
+                </label>
+            </div>
+            <button onclick="generatePassword()">生成密码</button>
+            <div id="pwdResult" class="result hidden"></div>
+        </div>
+
+        <!-- 日期计算 -->
+        <div id="date" class="tool-card hidden">
+            <h2>日期计算器</h2>
+            <div class="form-group">
+                <label>开始日期</label>
+                <input type="date" id="dateStart">
+            </div>
+            <div class="form-group">
+                <label>结束日期</label>
+                <input type="date" id="dateEnd">
+            </div>
+            <div class="form-group">
+                <label>或输入天数</label>
+                <input type="number" id="dateDays" placeholder="30">
+            </div>
+            <button onclick="calcDate()">计算</button>
+            <div id="dateResult" class="result hidden"></div>
+        </div>
+
+        <!-- 文本工具 -->
+        <div id="text" class="tool-card hidden">
+            <h2>文本工具</h2>
+            <div class="form-group">
+                <label>输入文本</label>
+                <textarea id="textInput" placeholder="在此输入文本..."></textarea>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="textTool('upper')">转大写</button>
+                <button onclick="textTool('lower')">转小写</button>
+                <button onclick="textTool('count')">字数统计</button>
+                <button onclick="textTool('removeSpace')">去空格</button>
+                <button onclick="textTool('reverse')">反转</button>
+            </div>
+            <div id="textResult" class="result hidden"></div>
+        </div>
+
+        <!-- 颜色工具 -->
+        <div id="color" class="tool-card hidden">
+            <h2>颜色代码转换</h2>
+            <div class="form-group">
+                <label>输入颜色代码（如 #FF0000 或 rgb(255,0,0)）</label>
+                <input type="text" id="colorInput" placeholder="#FF0000">
+            </div>
+            <div class="form-group">
+                <label>或选择颜色</label>
+                <input type="color" id="colorPicker" value="#667eea">
+            </div>
+            <button onclick="convertColor()">转换</button>
+            <div id="colorResult" class="result hidden"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 在线工具箱 | 免费实用工具</p>
+    </div>
+
+    <script>
+        function showTool(id) {
+            document.querySelectorAll('.tool-card').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav button').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        // 随机抽奖
+        function doLottery() {
+            const names = document.getElementById('lotteryNames').value.trim().split('\n').filter(n => n.trim());
+            const count = parseInt(document.getElementById('lotteryCount').value);
+            if (names.length === 0) {
+                alert('请输入抽奖名单');
+                return;
+            }
+            if (count > names.length) {
+                alert('抽取人数不能超过名单人数');
+                return;
+            }
+            const shuffled = [...names].sort(() => Math.random() - 0.5);
+            const winners = shuffled.slice(0, count);
+            const result = document.getElementById('lotteryResult');
+            result.classList.remove('hidden');
+            result.innerHTML = '恭喜中奖：\n' + winners.map((w, i) => `${i + 1}. ${w}`).join('\n');
+        }
+
+        // 密码生成
+        function generatePassword() {
+            const length = parseInt(document.getElementById('pwdLength').value);
+            const useUpper = document.getElementById('pwdUpper').checked;
+            const useNumber = document.getElementById('pwdNumber').checked;
+            const useSymbol = document.getElementById('pwdSymbol').checked;
+
+            let chars = 'abcdefghijklmnopqrstuvwxyz';
+            if (useUpper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (useNumber) chars += '0123456789';
+            if (useSymbol) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars[Math.floor(Math.random() * chars.length)];
+            }
+            const result = document.getElementById('pwdResult');
+            result.classList.remove('hidden');
+            result.textContent = '生成的密码：\n' + password + '\n\n已复制到剪贴板';
+            navigator.clipboard.writeText(password);
+        }
+
+        // 日期计算
+        function calcDate() {
+            const start = document.getElementById('dateStart').value;
+            const end = document.getElementById('dateEnd').value;
+            const days = document.getElementById('dateDays').value;
+            const result = document.getElementById('dateResult');
+            result.classList.remove('hidden');
+
+            if (start && end) {
+                const d1 = new Date(start);
+                const d2 = new Date(end);
+                const diff = Math.abs(d2 - d1);
+                const dayCount = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                result.textContent = `从 ${start} 到 ${end}：\n共 ${dayCount} 天\n约 ${Math.floor(dayCount / 7)} 周 ${dayCount % 7} 天`;
+            } else if (start && days) {
+                const d1 = new Date(start);
+                d1.setDate(d1.getDate() + parseInt(days));
+                result.textContent = `从 ${start} 开始 ${days} 天后：\n${d1.toISOString().split('T')[0]}`;
+            } else {
+                result.textContent = '请选择日期或输入天数';
+            }
+        }
+
+        // 文本工具
+        function textTool(type) {
+            const text = document.getElementById('textInput').value;
+            const result = document.getElementById('textResult');
+            result.classList.remove('hidden');
+
+            switch(type) {
+                case 'upper': result.textContent = text.toUpperCase(); break;
+                case 'lower': result.textContent = text.toLowerCase(); break;
+                case 'count': {
+                    const chars = text.length;
+                    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                    const lines = text.split('\n').length;
+                    result.textContent = `字符数：${chars}\n单词数：${words}\n行数：${lines}`;
+                    break;
+                }
+                case 'removeSpace': result.textContent = text.replace(/\s+/g, ''); break;
+                case 'reverse': result.textContent = text.split('').reverse().join(''); break;
+            }
+        }
+
+        // 颜色转换
+        function convertColor() {
+            const input = document.getElementById('colorInput').value || document.getElementById('colorPicker').value;
+            const result = document.getElementById('colorResult');
+            result.classList.remove('hidden');
+
+            let hex, r, g, b;
+            if (input.startsWith('#')) {
+                hex = input;
+                r = parseInt(hex.slice(1, 3), 16);
+                g = parseInt(hex.slice(3, 5), 16);
+                b = parseInt(hex.slice(5, 7), 16);
+            } else if (input.startsWith('rgb')) {
+                const match = input.match(/\d+/g);
+                r = parseInt(match[0]);
+                g = parseInt(match[1]);
+                b = parseInt(match[2]);
+                hex = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+            }
+
+            result.textContent = `HEX: ${hex}\nRGB: rgb(${r}, ${g}, ${b})\nHSL: ${rgbToHsl(r, g, b)}`;
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) { h = s = 0; } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+        }
+
+        // 设置默认日期
+        document.getElementById('dateStart').value = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+</html>
